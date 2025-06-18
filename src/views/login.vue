@@ -32,8 +32,8 @@
 </template>
 
 <script setup>
-import logo from '@/assets/images/logo-rsi-banjarmasin.png'
-import bgApotik from '@/assets/images/bg-apotik.jpg'
+import logo from '/assets/images/logo-rsi-banjarmasin.png'
+import bgApotik from '/assets/images/bg-apotik.jpg'
 
 const handleSubmit = () => {
   // Tambahkan logic login di sini
