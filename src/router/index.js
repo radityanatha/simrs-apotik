@@ -5,6 +5,7 @@ import Login from '../views/login.vue'
 import DashboardAdmin from '../views/admin/dashboard.vue'
 import AntrianPetugas from '../views/petugas/antrian.vue'
 import StokObatPetugas from '../views/petugas/stokObat.vue'
+import SidebarPetugas from '../views/petugas/sidebar.vue'
 
 const routes = [
   { path: '/', name: 'Login', component: Login },
