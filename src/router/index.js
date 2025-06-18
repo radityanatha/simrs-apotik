@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from '@/views/Login.vue'
+import Login from '../views/Login.vue'
 import DashboardAdmin from '@/views/admin/Dashboard.vue'
 import AntrianPetugas from '@/views/petugas/Antrian.vue'
 
