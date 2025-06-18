@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
+// Import views
 import Login from '../views/login.vue'
 import DashboardAdmin from '../views/admin/dashboard.vue'
 import AntrianPetugas from '../views/petugas/antrian.vue'
+import StokObatPetugas from '../views/petugas/stokobat.vue' // 👈 Tambahan baru
 
 const routes = [
   { path: '/', name: 'Login', component: Login },
@@ -14,6 +17,11 @@ const routes = [
     path: '/petugas/antrian',
     name: 'PetugasAntrian',
     component: AntrianPetugas,
+  },
+  {
+    path: '/petugas/stok-obat',
+    name: 'PetugasStokObat',
+    component: StokObatPetugas,
   },
 ]
 

@@ -1,243 +1,148 @@
 <template>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Apoteker - Riwayat</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-
-<body class="font-sans bg-gray-100">
-    <div class="flex min-h-screen">
+    <div class="flex min-h-screen bg-gray-100 font-sans">
         <!-- Sidebar -->
-        <!-- include -->('petugas.sidebar')
+        <SidebarComponent />
+
         <!-- Main Content -->
         <main class="flex-1 p-6 bg-white rounded shadow-md">
             <!-- Header -->
             <div class="relative flex items-center justify-between px-4 mb-6">
                 <h1 class="text-2xl font-semibold text-gray-800">Riwayat E-Resep</h1>
                 <div class="flex items-center space-x-4 text-sm text-gray-700">
-                    <span>03 April 2025</span>
-                    <!-- icon notifikasi -->
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-6 h-6 text-blue-900">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-                    </svg>
-                    <!-- icon user -->
-                    <button id="profileBtn" class="flex items-center space-x-2 focus:outline-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6 text-blue-900">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        </svg>
-                    </button>
-                    <!-- Pop-up -->
-                    <div id="profilePopup"
-                        class="absolute z-50 hidden w-64 p-4 bg-white border shadow-lg top-10 right-4 rounded-xl">
-                        <div class="flex items-center mb-3 space-x-3">
-                            <img src="assets/img/download (3).jpg" alt="Profile"
-                                class="object-cover w-12 h-12 rounded-full" />
-                            <div>
-                                <p class="text-base font-semibold text-gray-800">Violet Evergarden</p>
-                                <p class="text-xs text-gray-500">Petugas Apotek</p>
-                            </div>
-                        </div>
-                        <hr class="mb-3" />
-                        <button
-                            class="flex items-center mb-3 space-x-2 text-sm text-gray-800 hover:underline w-full px-2 py-2 rounded transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-                            <span>Profil Saya</span>
+                    <span>{{ currentDate }}</span>
+                    <!-- Notification Icon -->
+                    <NotificationIcon />
+                    <!-- Profile Button -->
+                    <div class="relative">
+                        <button @click="toggleProfilePopup" class="focus:outline-none">
+                            <UserIcon />
                         </button>
-                        <button
-                            class="w-full py-2 text-sm text-white bg-blue-900 rounded-md hover:bg-blue-800">Keluar</button>
+                        <div v-if="showProfilePopup"
+                            class="absolute z-50 w-64 p-4 bg-white border shadow-lg top-10 right-0 rounded-xl">
+                            <div class="flex items-center mb-3 space-x-3">
+                                <img src="/assets/img/download (3).jpg" alt="Profile"
+                                    class="object-cover w-12 h-12 rounded-full" />
+                                <div>
+                                    <p class="text-base font-semibold text-gray-800">Violet Evergarden</p>
+                                    <p class="text-xs text-gray-500">Petugas Apotek</p>
+                                </div>
+                            </div>
+                            <hr class="mb-3" />
+                            <button
+                                class="flex items-center mb-3 space-x-2 text-sm text-gray-800 hover:underline w-full px-2 py-2 rounded transition">
+                                <UserIcon class="w-5 h-5 mr-2" />
+                                <span>Profil Saya</span>
+                            </button>
+                            <button
+                                class="w-full py-2 text-sm text-white bg-blue-900 rounded-md hover:bg-blue-800">Keluar</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Search -->
-            <form METHOD="GET" action="{{ route('petugas.riwayatAntrian') }}" class="flex justify-end mb-2">
-                <div class="mb-4 flex justify-end">
-                    <input type="text" id="searchInput"name="search" value="{{ request('search') }}" placeholder="Cari Pasien..."
-                        class="px-3 py-1 text-sm border border-gray-300 rounded" />
-            </form>
-    </div>
-
-    <!-- Table -->
-    <div class="overflow-auto">
-        <table class="min-w-full text-sm border-collapse border rounded-lg overflow-hidden">
-            <thead class="bg-blue-900 text-white">
-                <tr>
-                    <th class="border px-4 py-2">Kode E-Resep</th>
-                    <th class="border px-4 py-2">Rekam Medis</th>
-                    <th class="border px-4 py-2">Nama Pasien</th>
-                    <th class="border px-4 py-2">Tanggal Diterima</th>
-                    <th class="border px-4 py-2">Tanggal Selesai</th>
-                    <th class="border px-4 py-2">Status</th>
-                    <th class="border px-4 py-2"></th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-800">
-                <template v-for ($riwayat as $id_resep => $items)
-                @php $first = is_array($items) ? ($items[0] ?? []) : (is_object($items) ? $items->first() : []); @endphp
-                    <tr>
-                        <td class="border px-4 py-2">{{ $id_resep }}</td>
-                        <td class="border px-4 py-2">{{ $first['antrean']['rm'] ?? '-'}}</td>
-                        <td class="border px-4 py-2">{{ $first['riwayat']['nama_pasien'] ?? '-'}}</td>
-                        <td class="border px-4 py-2">{{ $first['riwayat']['tanggal_diterima'] ?? '-'}}</td>
-                        <td class="border px-4 py-2">{{ $first['riwayat']['tanggal_selesai'] ?? '-'}}</td>
-                        <td class="px-4 py-2 text-green-600 border">{{ $first['riwayat']['status'] ?? '-' }}</td>
-                        <td class="border px-4 py-2 relative">
-                            <button class="more-btn" onclick="toggleMenu(this)">⋮</button>
-                            <div class="lihat-obat-menu absolute right-0 z-10 mt-2 w-40 bg-white border rounded shadow-lg hidden">
-                                <button onclick="openModal('detailRiwayatModal{{ $id_resep }}')"
-                                    class="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-blue-900"
-                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                            d="M9 12h6m-3-3v6m9-6.75V19.5A2.25 2.25 0 0 1 18.75 21H5.25A2.25 2.25 0 0 1 3 19.5V6.75M21 6.75A2.25 2.25 0 0 0 18.75 4.5h-1.5a.75.75 0 0 1-.75-.75V3a.75.75 0 0 0-.75-.75h-6A.75.75 0 0 0 9 3v.75a.75.75 0 0 1-.75.75h-1.5A2.25 2.25 0 0 0 3 6.75" />
-                                    </svg>
-                                    Lihat Obat
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </template>
-            </tbody>
-        </table>
-    </div>
-
-    </main>
-    </div>
-
-    <!-- Modal Data Obat -->
-    <template v-for ($riwayat as $id_resep => $items)
-    @php $first = is_array($items) ? ($items[0] ?? []) : (is_object($items) ? $items->first() : []); @endphp
-        <div id="detailRiwayatModal{{ $id_resep }}"
-            class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div class="bg-white rounded-xl shadow-lg w-full max-w-4xl p-8">
-                <h2 class="text-2xl font-semibold text-blue-900 mb-2">Data Obat</h2>
-                <p class="text-base text-gray-700 mb-1">Kode E-Resep : <span
-                        class="font-medium">{{ $id_resep }}</span></p>
-                <p class="text-base text-gray-700 mb-4">Nama Pasien : <span
-                        class="font-medium">{{ $first['riwayat']['nama_pasien'] ?? '-'}}</span></p>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full border border-collapse rounded-lg">
-                        <thead class="bg-blue-900 text-white">
-                            <tr>
-                                <th class="px-4 py-2 border">Kode</th>
-                                <th class="px-4 py-2 border">Nama Obat</th>
-                                <th class="px-4 py-2 border">Kategori</th>
-                                <th class="px-4 py-2 border">Bentuk Satuan</th>
-                                <th class="px-4 py-2 border">Jumlah</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-gray-50">
-                            <template v-for ($items as $detail)
-                            <template v-if (is_array($detail) && isset($detail['obat'], $detail['kategori']))
-                                <tr>
-                                    <td class="px-4 py-2 border">{{ $detail['obat']['id_obat'] }}</td>
-                                    <td class="px-4 py-2 border">{{ $detail['obat']['nama_obat'] }}</td>
-                                    <td class="px-4 py-2 border">{{ $detail['kategori']['nama_kategori'] }}</td>
-                                    <td class="px-4 py-2 border">{{ $detail['obat']['bentuk_satuan'] }}</td>
-                                    <td class="px-4 py-2 border">{{ $detail['jumlah'] }}</td>
-                                </tr>
-                                </template>
-                            </template>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="flex justify-end mt-6">
-                    <button onclick="closeModal('detailRiwayatModal{{ $id_resep }}')"
-                        class="px-6 py-2 rounded bg-blue-900 text-white hover:bg-blue-800">Tutup</button>
-                </div>
+            <div class="flex justify-end mb-4">
+                <input v-model="searchQuery" type="text" placeholder="Cari Pasien..."
+                    class="px-3 py-1 text-sm border border-gray-300 rounded" />
             </div>
-        </div>
-    </template>
 
-    <script>
-        // Profile popup logic
-        const profileBtn = document.getElementById('profileBtn');
-        const profilePopup = document.getElementById('profilePopup');
+            <!-- Table -->
+            <div class="overflow-auto">
+                <table class="min-w-full text-sm border-collapse border rounded-lg overflow-hidden">
+                    <thead class="bg-blue-900 text-white">
+                        <tr>
+                            <th class="border px-4 py-2">Kode E-Resep</th>
+                            <th class="border px-4 py-2">Rekam Medis</th>
+                            <th class="border px-4 py-2">Nama Pasien</th>
+                            <th class="border px-4 py-2">Tanggal Diterima</th>
+                            <th class="border px-4 py-2">Tanggal Selesai</th>
+                            <th class="border px-4 py-2">Status</th>
+                            <th class="border px-4 py-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-800">
+                        <tr v-for="(items, id_resep) in filteredRiwayat" :key="id_resep">
+                            <td class="border px-4 py-2">{{ id_resep }}</td>
+                            <td class="border px-4 py-2">{{ items[0]?.antrean?.rm || '-' }}</td>
+                            <td class="border px-4 py-2">{{ items[0]?.riwayat?.nama_pasien || '-' }}</td>
+                            <td class="border px-4 py-2">{{ items[0]?.riwayat?.tanggal_diterima || '-' }}</td>
+                            <td class="border px-4 py-2">{{ items[0]?.riwayat?.tanggal_selesai || '-' }}</td>
+                            <td class="px-4 py-2 text-green-600 border">{{ items[0]?.riwayat?.status || '-' }}</td>
+                            <td class="border px-4 py-2 relative">
+                                <button @click="toggleMenu(id_resep)">⋮</button>
+                                <div v-if="activeMenu === id_resep"
+                                    class="absolute right-0 z-10 mt-2 w-40 bg-white border rounded shadow-lg">
+                                    <button @click="openModal(id_resep)"
+                                        class="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
+                                        <span class="mr-2">📝</span>
+                                        Lihat Obat
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
 
-        profileBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            profilePopup.classList.toggle('hidden');
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!profilePopup.contains(e.target) && e.target !== profileBtn) {
-                profilePopup.classList.add('hidden');
-            }
-        });
-
-        // Toggle menu function (lihat obat)
-        function toggleMenu(btn) {
-            document.querySelectorAll('.lihat-obat-menu').forEach(menu => menu.classList.add('hidden'));
-            const menu = btn.nextElementSibling;
-            menu.classList.toggle('hidden');
-            document.addEventListener('click', function handler(e) {
-                if (!menu.contains(e.target) && e.target !== btn) {
-                    menu.classList.add('hidden');
-                    document.removeEventListener('click', handler);
-                }
-            });
-        }
-
-        // Modal logic
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
-
-        // Event untuk tombol "Lihat Obat"
-        document.querySelectorAll('.lihat-obat-menu button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                openModal('dataObatModal');
-                btn.parentElement.classList.add('hidden');
-            });
-        });
-
-        const searchInput = document.getElementById('searchInput');
-        const tableRows = document.querySelectorAll('tbody tr');
-
-        searchInput.addEventListener('input', function () {
-          const searchTerm = this.value.toLowerCase();
-
-          tableRows.forEach(row => {
-            const namaPasien = row.cells[2].textContent.toLowerCase();
-
-            if (searchTerm.length >= 3 && namaPasien.startsWith(searchTerm)) {
-              row.style.display = '';
-            } else if (searchTerm.length < 3) {
-              row.style.display = '';
-            } else {
-              row.style.display = 'none';
-            }
-          });
-        });
-
-    </script>
-</body>
-
-</html>
-
+        <!-- Modal Detail Obat -->
+        <ModalDetailObat v-for="(items, id_resep) in riwayat" :key="id_resep" :id="id_resep" :items="items"
+            :isOpen="openModalId === id_resep" @close="closeModal" />
+    </div>
 </template>
 
 <script setup>
-// Add your JS logic here
+import { ref, computed } from 'vue'
+import SidebarComponent from '@/components/SidebarComponent.vue'
+import ModalDetailObat from '@/components/ModalDetailObat.vue'
+import UserIcon from '@/components/icons/UserIcon.vue'
+import NotificationIcon from '@/components/icons/NotificationIcon.vue'
+
+const searchQuery = ref('')
+const showProfilePopup = ref(false)
+const activeMenu = ref(null)
+const openModalId = ref(null)
+
+// Simulasi data, ganti dengan props / fetch API
+const riwayat = ref({
+    // "RSP123": [ ... ],
+})
+
+const toggleProfilePopup = () => {
+    showProfilePopup.value = !showProfilePopup.value
+}
+
+const toggleMenu = (id) => {
+    activeMenu.value = activeMenu.value === id ? null : id
+}
+
+const openModal = (id) => {
+    openModalId.value = id
+    activeMenu.value = null
+}
+
+const closeModal = () => {
+    openModalId.value = null
+}
+
+const filteredRiwayat = computed(() => {
+    const term = searchQuery.value.toLowerCase()
+    if (!term || term.length < 3) return riwayat.value
+    const result = {}
+    for (const [id, items] of Object.entries(riwayat.value)) {
+        const nama = items?.[0]?.riwayat?.nama_pasien?.toLowerCase() || ''
+        if (nama.startsWith(term)) result[id] = items
+    }
+    return result
+})
+
+const currentDate = new Date().toLocaleDateString('id-ID', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+})
 </script>
 
 <style scoped>
-/* Add your styles here */
+/* Optional styling */
 </style>
